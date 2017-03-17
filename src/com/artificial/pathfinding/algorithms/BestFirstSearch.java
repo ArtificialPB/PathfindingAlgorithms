@@ -1,40 +1,41 @@
 package com.artificial.pathfinding.algorithms;
 
+import com.artificial.pathfinding.Graph;
 import com.artificial.pathfinding.Heuristics;
 import com.artificial.pathfinding.Node;
 
 import java.util.*;
 
-public class BestFirstSearch implements Pathfinder {
+public class BestFirstSearch extends Pathfinder {
     @Override
-    public List<Node> findPath(Node start, Node end) {
-        final Heuristics heuristics = Heuristics.EUCLIDEAN;
-        final Map<Node, Double> g_score = new HashMap<>(), f_score = new HashMap<>();
-        final Set<Node> closed = new HashSet<>();
-        final Queue<Node> opened = new PriorityQueue<>(Comparator.comparing(o -> f_score.getOrDefault(o, Double.MAX_VALUE)));
+    public List<Node> findPath(final Graph graph, final Node start, final Node end) {
+        final Heuristics heuristics = graph.getHeuristics();
+        final Map<Node, Double> h_score = new HashMap<>();
+        final Queue<Node> opened = new PriorityQueue<>(Comparator.comparing(o -> h_score.getOrDefault(o, Double.MAX_VALUE)));
         final Map<Node, Node> path = new HashMap<>();
-        g_score.put(start, 0d);
-        f_score.put(start, heuristics.distance(start, end));
+        h_score.put(start, heuristics.distance(start, end));
+        opened.add(start);
         while (!opened.isEmpty()) {
-            //Node with lowest f_score
+            //Node with lowest h_score
             final Node curr = opened.poll();
             if (curr.equals(end)) {
                 return constructPath(path, end);
             }
-            closed.add(curr);
-            for (final Node next : curr.getEdges()) {
-                if (closed.contains(next) || !next.valid()) {
+            curr.setState(Node.State.CLOSED);
+            for (final Node next : getEdges(graph, curr)) {
+                if (next.getState() == Node.State.CLOSED || !next.valid()) {
                     continue;
                 }
-                final double total_g = g_score.get(curr) + next.getCost();
+                final double total_g = h_score.get(curr) + next.getCost() + heuristics.distance(curr, next);
                 if (!opened.contains(next)) {
                     opened.add(next);
-                } else if (total_g >= g_score.getOrDefault(next, Double.MAX_VALUE)) {
+                    next.setState(Node.State.OPENED);
+                } else if (total_g >= h_score.getOrDefault(next, Double.MAX_VALUE)) {
                     continue;
                 }
-                path.put(next, start);
-                g_score.put(next, total_g);
-                f_score.put(next, total_g + heuristics.distance(next, end));
+                path.put(next, curr);
+                h_score.put(next, total_g);
+                delay(10);
             }
         }
         return null;

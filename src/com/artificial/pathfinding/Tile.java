@@ -15,4 +15,9 @@ public class Tile {
     public int getY() {
         return y;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof Tile && this.x == ((Tile) obj).x && this.y == ((Tile) obj).y;
+    }
 }

@@ -1,35 +1,39 @@
 package com.artificial.pathfinding.algorithms;
 
+import com.artificial.pathfinding.Graph;
 import com.artificial.pathfinding.Node;
 
 import java.util.*;
 
 //https://en.wikipedia.org/wiki/Dijkstra's_algorithm
-public class Dijkstra implements Pathfinder {
+public class Dijkstra extends Pathfinder {
     @Override
-    public List<Node> findPath(final Node start, final Node end) {
-        final Map<Node, Double> costMap = new HashMap<>();
-        final Queue<Node> opened = new PriorityQueue<>(Comparator.comparing(o -> costMap.getOrDefault(o, Double.MAX_VALUE)));
-        final Set<Node> closed = new HashSet<Node>();
+    public List<Node> findPath(final Graph graph, final Node start, final Node end) {
+        final Map<Node, Double> g_score = new HashMap<>();
+        final Queue<Node> opened = new PriorityQueue<>(Comparator.comparing(o -> g_score.getOrDefault(o, Double.MAX_VALUE)));
         final Map<Node, Node> path = new HashMap<>();
         opened.add(start);
-        costMap.put(start, 0d);
+        g_score.put(start, 0d);
         while (!opened.isEmpty()) {
-            final Node current = opened.poll();
-            if (current.equals(end)) {
+            final Node curr = opened.poll();
+            if (curr.equals(end)) {
                 return constructPath(path, end);
             }
-            closed.add(current);
-            for (final Node next : current.getEdges()) {
-                if (closed.contains((next)) || !next.valid()) {
+            curr.setState(Node.State.CLOSED);
+            for (final Node next : getEdges(graph, curr)) {
+                if (next.getState() == Node.State.CLOSED || !next.valid()) {
                     continue;
                 }
-                final double total_cost = costMap.getOrDefault(current, Double.MAX_VALUE) + next.getCost();
-                if (total_cost < costMap.getOrDefault(next, Double.MAX_VALUE)) {
-                    path.put(next, current);
-                    costMap.put(next, total_cost);
+                final double total_g = g_score.get(curr) + next.getCost();
+                if (!opened.contains(next)) {
                     opened.add(next);
+                    next.setState(Node.State.OPENED);
+                } else if (total_g >= g_score.getOrDefault(next, Double.MAX_VALUE)) {
+                    continue;
                 }
+                path.put(next, curr);
+                g_score.put(next, total_g);
+                delay(10);
             }
         }
         return null;

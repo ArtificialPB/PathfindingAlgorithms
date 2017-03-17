@@ -1,6 +1,8 @@
 package com.artificial.pathfinding;
 
 public interface Locatable {
+    int getX();
 
-    Tile getTile();
+    int getY();
+
 }
