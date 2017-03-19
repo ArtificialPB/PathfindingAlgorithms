@@ -7,7 +7,7 @@ import com.artificial.pathfinding.Node;
 import java.util.*;
 
 //https://en.wikipedia.org/wiki/A*_search_algorithm
-public class AStar extends Pathfinder {
+public class AStar extends Algorithm {
     @Override
     public List<Node> findPath(final Graph graph, final Node start, final Node end) {
         final Heuristics heuristics = graph.getHeuristics();

@@ -6,7 +6,7 @@ import com.artificial.pathfinding.Node;
 import java.util.*;
 
 //https://en.wikipedia.org/wiki/Dijkstra's_algorithm
-public class Dijkstra extends Pathfinder {
+public class Dijkstra extends Algorithm {
     @Override
     public List<Node> findPath(final Graph graph, final Node start, final Node end) {
         final Map<Node, Double> g_score = new HashMap<>();

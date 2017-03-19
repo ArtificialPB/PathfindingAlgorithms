@@ -10,7 +10,7 @@ import java.util.List;
 //TODO Re-check this
 //http://waprogramming.com/papers/50af7709377c22.88356189.pdf
 //Similar to A*, but uses less memory because only one path is stored at a time
-public class IterativeDeepening extends Pathfinder {
+public class IterativeDeepening extends Algorithm {
     @Override
     public List<Node> findPath(final Graph graph, final Node start, final Node end) {
         final Heuristics heuristics = graph.getHeuristics();

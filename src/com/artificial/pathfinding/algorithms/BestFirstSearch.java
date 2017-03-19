@@ -6,7 +6,7 @@ import com.artificial.pathfinding.Node;
 
 import java.util.*;
 
-public class BestFirstSearch extends Pathfinder {
+public class BestFirstSearch extends Algorithm {
     @Override
     public List<Node> findPath(final Graph graph, final Node start, final Node end) {
         final Heuristics heuristics = graph.getHeuristics();

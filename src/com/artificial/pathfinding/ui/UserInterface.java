@@ -4,7 +4,7 @@ import com.artificial.pathfinding.Graph;
 import com.artificial.pathfinding.Heuristics;
 import com.artificial.pathfinding.Node;
 import com.artificial.pathfinding.Tile;
-import com.artificial.pathfinding.algorithms.Algorithm;
+import com.artificial.pathfinding.algorithms.Pathfinder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +28,7 @@ public class UserInterface extends JFrame {
         final JPanel topSettingsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         settingsPanel.add(topSettingsPanel);
 
-        final JComboBox<Algorithm> algorithmCombo = new JComboBox<>(new DefaultComboBoxModel<>(Algorithm.values()));
+        final JComboBox<Pathfinder> algorithmCombo = new JComboBox<>(new DefaultComboBoxModel<>(Pathfinder.values()));
         final JComboBox<Heuristics> heuristicsCombo = new JComboBox<>(Heuristics.values());
         final JButton searchButton = new JButton("Find Path");
         final JButton clearWallsButton = new JButton("Clear walls");
@@ -44,7 +44,7 @@ public class UserInterface extends JFrame {
             final Graph g = gridPanel.getGraph();
             g.resetStates();
             final Tile start = gridPanel.getStart(), end = gridPanel.getEnd();
-            final Algorithm algorithm = (Algorithm) algorithmCombo.getSelectedItem();
+            final Pathfinder algorithm = (Pathfinder) algorithmCombo.getSelectedItem();
             g.setHeuristics((Heuristics) heuristicsCombo.getSelectedItem());
             final Thread thread = new Thread(() -> {
                 final java.util.List<Node> path = algorithm.getAlgorithm().findPath(g, g.getNodeAt(start.getX(), start.getY()), g.getNodeAt(end.getX(), end.getY()));
