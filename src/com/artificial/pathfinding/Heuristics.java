@@ -2,7 +2,7 @@ package com.artificial.pathfinding;
 
 public enum Heuristics {
     MANHATTAN((start, end) -> Math.abs(start.getX() - end.getX()) + Math.abs(start.getY() - end.getY())),
-    EUCLIDEAN((start, end) -> Math.sqrt((start.getX() - end.getX()) * (start.getX() - end.getX()) + (start.getY() - end.getY()) * (start.getY() - end.getY()))),
+    EUCLIDEAN((start, end) -> (start.getX() - end.getX()) * (start.getX() - end.getX()) + (start.getY() - end.getY()) * (start.getY() - end.getY())),
     OCTILE((start, end) -> {
         final int dx = Math.abs(start.getX() - end.getX());
         final int dy = Math.abs(start.getY() - end.getY());
